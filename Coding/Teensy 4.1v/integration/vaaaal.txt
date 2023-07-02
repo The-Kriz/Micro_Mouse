@@ -1,0 +1,85 @@
+Left Count: 724 Right Count: 727
+Left Count: 726 Right Count: 724
+Left Count: 728 Right Count: 712
+Left Count: 727 Right Count: 728
+Left Count: 722 Right Count: 735
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Left Count: -707 Right Count: -720
+Left Count: -726 Right Count: -716
+Left Count: -722 Right Count: -722
+Left Count: -728 Right Count: -728
+
+
+
+724+727+726+724+728+712+727+728+722+735
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+707+720+726+716+722+722+728+728
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (encoderPosLeft < targetDistanceLeft || encoderPosRight < targetDistanceRight)
+    {
+
+      // Compute motor speeds using PID control
+      int motorSpeedLeft = pidLeft.compute(encoderPosLeft);
+      int motorSpeedRight = pidRight.compute(encoderPosRight);
+      
+      Serial.print("Left Speed: ");
+      Serial.print(motorSpeedLeft);
+      Serial.print(" Right Speed: ");
+      Serial.print(motorSpeedRight);
+      Serial.print(" Left Count: ");
+      Serial.print(encoderPosLeft);
+      Serial.print(" Right Count: ");
+      Serial.println(encoderPosRight);
+      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
+      bt.print(motorSpeedLeft);
+      bt.print(" Right Speed: ");
+      bt.print(motorSpeedRight);
+      bt.print(" Left Count: ");
+      bt.print(encoderPosLeft);
+      bt.print(" Right Count: ");
+      bt.println(encoderPosRight);
+      
+      // Set motor speeds
+      analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
+      analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
+    }
