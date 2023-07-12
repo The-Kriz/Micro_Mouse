@@ -133,7 +133,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       print_maze(maze);
 
     }
-    if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX - 1][currentY].left == 0)
+    else if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX - 1][currentY].left == 0)
     {
       stack[++top].x = currentX - 1;
       stack[top].y = currentY;
@@ -150,7 +150,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.println(currentOrientation);
       print_maze(maze);
     }
-    if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY + 1].centre == 0)
+    else if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY + 1].centre == 0)
     {
       stack[++top].x = currentX;
       stack[top].y = currentY + 1;
@@ -168,7 +168,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.println(currentOrientation);
       print_maze(maze);
     }
-    if (currentY - 1 >= 0 && !maze->cells[currentX][currentY - 1].visited && !maze->cells[currentX][currentY - 1].centre == 0 && !maze->cells[currentX - 1][currentY].left == 0 && !maze->cells[currentX - 1][currentY].left == 0)
+    else if (currentY - 1 >= 0 && !maze->cells[currentX][currentY - 1].visited && !maze->cells[currentX][currentY - 1].centre == 0 && !maze->cells[currentX - 1][currentY].left == 0 && !maze->cells[currentX - 1][currentY].left == 0)
     {
       stack[++top].x = currentX;
       stack[top].y = currentY - 1;
