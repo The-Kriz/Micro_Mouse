@@ -1,3 +1,20 @@
+/* MazeSolver 1.1v 
+ * Harikrishnan M     https://github.com/The-Kriz
+ * Atulya Deep        https://github.com/atulya-deep
+ *                           _____________________
+ *                          |                     |
+ *                          |  L       C       R  |
+ *                          | TOF     TOF     TOF |
+ *                          |                     |
+ *                          |                     | 
+ *                          |                     | 
+ *                 Motor B  |                     |  Motor A
+ *                          | LED                 | 
+ *                          |     Reset Start     | 
+ *                           ---------------------
+ *
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Wire.h>
 #include <VL53L0X.h>
 #include <FastLED.h>
@@ -38,3 +55,4 @@ VL53L0X sensorL;
 VL53L0X sensorC;
 VL53L0X sensorR;
 HardwareSerial& bt(Serial3);
+////////////////////////////////////////////////////////////////////////////////////////////////////////

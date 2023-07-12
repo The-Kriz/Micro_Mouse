@@ -8,6 +8,8 @@ bool Left_Wall()
   bt.println(Left_Sensor_Reading);
   if (Left_Sensor_Reading > sensor_Lower_Limits[0] && Left_Sensor_Reading < sensor_Upper_Limits[0])
   {
+    leds[0] = CRGB::Blue;
+    FastLED.show();
     return true;
   }
   else
@@ -25,6 +27,8 @@ bool Center_Wall()
   bt.println(Center_Sensor_Reading);
   if (Center_Sensor_Reading > sensor_Lower_Limits[1] && Center_Sensor_Reading < sensor_Upper_Limits[1])
   {
+    leds[0] = CRGB::Amethyst;
+    FastLED.show();
     return true;
   }
   else
@@ -42,6 +46,8 @@ bool Right_Wall()
   bt.println(Right_Sensor_Reading);
   if (Right_Sensor_Reading > sensor_Lower_Limits[2] && Right_Sensor_Reading < sensor_Upper_Limits[2])
   {
+    leds[0] = CRGB::BlueViolet;
+    FastLED.show();
     return true;
   }
   else

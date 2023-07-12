@@ -1,3 +1,4 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
 {
   Serial.begin(9600);
@@ -5,6 +6,9 @@ void setup()
   pinMode(START_BUTTON, INPUT_PULLUP);
 
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.setBrightness(BRIGHTNESS );
+  leds[0] = CRGB::Aqua;
+  FastLED.show();
 
   pinMode(LEFT_PWM_PIN, OUTPUT);  // MOTOR DRIVER
   pinMode(LEFT_IN1_PIN, OUTPUT);
@@ -71,4 +75,7 @@ void setup()
   sensorL.startContinuous();
   sensorC.startContinuous();
   sensorR.startContinuous();
+  leds[0] = CRGB::Maroon;
+  FastLED.show();
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,5 @@
-void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight, int targetDistanceLeft = 0)
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight, int targetDistanceLeft = LeftrotationTargetDistanceLeft)
 {
   Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
   delay(200);
@@ -82,3 +83,4 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight, int ta
     }
   }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
