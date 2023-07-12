@@ -113,6 +113,8 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
 
     //update walls for the current cell if needed
     update_walls(maze, currentX, currentY, Left_Wall(), Center_Wall(), Right_Wall());
+    leds[0] = CRGB::Black;
+    FastLED.show();
 
     // Check neighboring cells
     if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX + 1][currentY].right == 0)
