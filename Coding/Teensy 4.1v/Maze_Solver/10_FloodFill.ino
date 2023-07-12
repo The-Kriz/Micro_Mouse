@@ -6,12 +6,13 @@
 #define EAST 1
 #define SOUTH 2
 #define WEST 3
-int destX = 8;
-int destY = 8;
+int Glob_destX = 8;
+int Glob_destY = 8;
+int Glob_startX = 0;
+int Glob_startY = 15;
 int MAZE_SIZE = 16;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 int currentOrientation = NORTH; // Global variable for current orientation
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 int orient = 0;              // Initial orientation
 struct cell                 // Define the cell struct
@@ -26,7 +27,7 @@ struct cell                 // Define the cell struct
 struct maze                  // Define the maze struct
 {
   struct cell cells[16][16];
-}mazes;
+} mazes;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 void init_maze(struct maze *mazes) {
@@ -63,15 +64,35 @@ void update_orientation_forward(int moveOrientation) // Function to update the o
 {
   currentOrientation = moveOrientation;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+void print_maze(struct maze *maze)
+{
+  for (int i = 0; i < MAZE_SIZE; i++)
+  {
+    for (int j = 0; j < MAZE_SIZE; j++)
+    {
+      if (maze->cells[i][j].centre == 0)
+      {
+        Serial.print(". ");
+      }
+      else
+      {
+        Serial.print("# ");
+      }
+    }
+    Serial.println("");
+  }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Flood fill algorithm with destination in the center of the maze
 {
   // Create a stack to store cell coordinates
-  struct 
+  struct
   {
     int x;
     int y;
-  }stack[MAZE_SIZE * MAZE_SIZE];
+  } stack[MAZE_SIZE * MAZE_SIZE];
   int top = 0; // Stack top index
 
   // Push the starting cell onto the stack
@@ -94,24 +115,40 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
     update_walls(maze, currentX, currentY, Left_Wall(), Center_Wall(), Right_Wall());
 
     // Check neighboring cells
-    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX + 1][currentY].centre == 0) {
+    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX + 1][currentY].centre == 0)
+    {
       stack[++top].x = currentX + 1;
       stack[top].y = currentY;
       maze->cells[currentX + 1][currentY].visited = true;
+      Serial.println("Turn Right Request");
+      bt.println("Turn Right Request");
       Turn_Right(); // Turn towards the next cell
-      //print(right turn)
+      Serial.println("Turn Right Request completed");
+      bt.println("Turn Right Request completed");
       update_orientation_right();
-      //print(currentOrientation)
+      Serial.print("Current Orientation :");
+      Serial.println(currentOrientation);
+      bt.print("Current Orientation :");
+      bt.println(currentOrientation);
+      print_maze(maze);
+
     }
     if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX - 1][currentY].centre == 0)
     {
       stack[++top].x = currentX - 1;
       stack[top].y = currentY;
       maze->cells[currentX - 1][currentY].visited = true;
+      Serial.println("Turn Left Request");
+      bt.println("Turn Left Request");
       Turn_Left(); // Turn towards the next cell
-      //print(left turn)
+      Serial.println("Turn Left Request completed");
+      bt.println("Turn Left Request completed");
       update_orientation_left();
-      //print(currentOrientation)
+      Serial.print("Current Orientation :");
+      Serial.println(currentOrientation);
+      bt.print("Current Orientation :");
+      bt.println(currentOrientation);
+      print_maze(maze);
     }
     if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY + 1].centre == 0)
     {
@@ -119,23 +156,37 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       stack[top].y = currentY + 1;
       maze->cells[currentX][currentY + 1].visited = true;
       // No need to turn as the bot is already oriented towards the next cell Move Forward
+      Serial.println("Move Forward Request");
+      bt.println("Move Forward Request");
       Move_Forward();
-      //print(forward)
+      Serial.println("Move Forward Request completed");
+      bt.println("Move Forward Request completed");
       update_orientation_forward(currentOrientation);
-      //print(currentOrientation)
+      Serial.print("Current Orientation :");
+      Serial.println(currentOrientation);
+      bt.print("Current Orientation :");
+      bt.println(currentOrientation);
+      print_maze(maze);
     }
     if (currentY - 1 >= 0 && !maze->cells[currentX][currentY - 1].visited && maze->cells[currentX][currentY - 1].centre == 0)
     {
       stack[++top].x = currentX;
       stack[top].y = currentY - 1;
       maze->cells[currentX][currentY - 1].visited = true;
+      Serial.println("U Turn Request");
+      bt.println("U Turn Request");
       U_Turn();
-      //print(uturn)
+      Serial.println("U Turn Request completed");
+      bt.println("U Turn Request completed");
       update_orientation_right();
       update_orientation_right();
-      //print(currentOrientation)
-      
+      Serial.print("Current Orientation :");
+      Serial.println(currentOrientation);
+      bt.print("Current Orientation :");
+      bt.println(currentOrientation);
+      print_maze(maze);
     }
+    Pause(maze);
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
