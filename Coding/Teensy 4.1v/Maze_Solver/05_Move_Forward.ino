@@ -50,25 +50,26 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistanceLeft, int target
       digitalWrite(RIGHT_IN2_PIN, LOW);
       Right_Done = true;
     }
-    Serial.print("Left Speed: ");  // BT MODULE (RX3 TX3)
-    Serial.print(motorSpeedLeft);
-    Serial.print(" Left Count: ");
-    Serial.print(encoderPosLeft);
-    bt.print("Left Speed: ");
-    bt.print(motorSpeedLeft);
-    bt.print(" Left Count: ");
-    bt.print(encoderPosLeft);
-
-    Serial.print(" Right Speed: ");
-    Serial.print(motorSpeedRight);
-    Serial.print(" Right Count: ");
-    Serial.println(encoderPosRight);
-    bt.print(" Right Speed: ");
-    bt.print(motorSpeedRight);
-    bt.print(" Right Count: ");
-    bt.print(encoderPosRight);
-    bt.println(" ");
-    Serial.println(" ");
+    delay(100);
+//    Serial.print("Left Speed: ");  // BT MODULE (RX3 TX3)
+//    Serial.print(motorSpeedLeft);
+//    Serial.print(" Left Count: ");
+//    Serial.print(encoderPosLeft);
+//    bt.print("Left Speed: ");
+//    bt.print(motorSpeedLeft);
+//    bt.print(" Left Count: ");
+//    bt.print(encoderPosLeft);
+//
+//    Serial.print(" Right Speed: ");
+//    Serial.print(motorSpeedRight);
+//    Serial.print(" Right Count: ");
+//    Serial.println(encoderPosRight);
+//    bt.print(" Right Speed: ");
+//    bt.print(motorSpeedRight);
+//    bt.print(" Right Count: ");
+//    bt.print(encoderPosRight);
+//    bt.println(" ");
+//    Serial.println(" ");
     if (Left_Done == true and Right_Done == true)
     {
       Both_Done = true;

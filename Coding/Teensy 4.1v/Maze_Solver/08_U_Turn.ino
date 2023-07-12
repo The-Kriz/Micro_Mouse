@@ -31,14 +31,14 @@ void U_Turn(int targetDistanceRight = LeftrotationTargetDistanceRight, int targe
         digitalWrite(RIGHT_IN1_PIN, LOW);
         digitalWrite(RIGHT_IN2_PIN, HIGH);
       }
-      Serial.print(" Right Speed: ");
-      Serial.print(motorSpeedRight);
-      Serial.print(" Right Count: ");
-      Serial.println(encoderPosRight);
-      bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
-      bt.print(motorSpeedRight);
-      bt.print(" Right Count: ");
-      bt.print(encoderPosRight);
+      //      Serial.print(" Right Speed: ");
+      //      Serial.print(motorSpeedRight);
+      //      Serial.print(" Right Count: ");
+      //      Serial.println(encoderPosRight);
+      //      bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
+      //      bt.print(motorSpeedRight);
+      //      bt.print(" Right Count: ");
+      //      bt.print(encoderPosRight);
       analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
     }
     if (encoderPosLeft == targetDistanceLeft)
@@ -61,19 +61,21 @@ void U_Turn(int targetDistanceRight = LeftrotationTargetDistanceRight, int targe
         digitalWrite(LEFT_IN1_PIN, LOW);
         digitalWrite(LEFT_IN2_PIN, HIGH);
       }
-      Serial.print("Left Speed: ");
-      Serial.print(motorSpeedLeft);
-      Serial.print(" Left Count: ");
-      Serial.print(encoderPosLeft);
-      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
-      bt.print(motorSpeedLeft);
-      bt.print(" Left Count: ");
-      bt.print(encoderPosLeft);
+      //      Serial.print("Left Speed: ");
+      //      Serial.print(motorSpeedLeft);
+      //      Serial.print(" Left Count: ");
+      //      Serial.print(encoderPosLeft);
+      //      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
+      //      bt.print(motorSpeedLeft);
+      //      bt.print(" Left Count: ");
+      //      bt.print(encoderPosLeft);
       analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
     }
 
-    bt.println(" ");
-    Serial.println(" ");
+    //    bt.println(" ");
+    //    Serial.println(" ");
+    delay(100);
+
     if (Left_Done == true and Right_Done == true)
     {
       Both_Done = true;
@@ -111,57 +113,58 @@ void U_Turn(int targetDistanceRight = LeftrotationTargetDistanceRight, int targe
         digitalWrite(LEFT_IN1_PIN, LOW);
         digitalWrite(LEFT_IN2_PIN, HIGH);
       }
-      Serial.print("Left Speed: ");
-      Serial.print(motorSpeedLeft);
-      Serial.print(" Left Count: ");
-      Serial.print(encoderPosLeft);
-      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
-      bt.print(motorSpeedLeft);
-      bt.print(" Left Count: ");
-      bt.print(encoderPosLeft);
+      //      Serial.print("Left Speed: ");
+      //      Serial.print(motorSpeedLeft);
+      //      Serial.print(" Left Count: ");
+      //      Serial.print(encoderPosLeft);
+      //      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
+      //      bt.print(motorSpeedLeft);
+      //      bt.print(" Left Count: ");
+      //      bt.print(encoderPosLeft);
       analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
     }
-    
-  if (encoderPosRight == Back_targetDistanceRight)
-  {
-    analogWrite(RIGHT_PWM_PIN, 0);
-    digitalWrite(RIGHT_IN1_PIN, LOW);
-    digitalWrite(RIGHT_IN2_PIN, LOW);
-    Right_Done = true;
-  }
-  else if (Right_Done != true)
-  {
-    int motorSpeedRight = pidRight.compute(encoderPosRight);
-    if (encoderPosRight < Back_targetDistanceRight)
+
+    if (encoderPosRight == Back_targetDistanceRight)
     {
-      digitalWrite(RIGHT_IN1_PIN, HIGH);
-      digitalWrite(RIGHT_IN2_PIN, LOW);
-    }
-    else
-    {
+      analogWrite(RIGHT_PWM_PIN, 0);
       digitalWrite(RIGHT_IN1_PIN, LOW);
-      digitalWrite(RIGHT_IN2_PIN, HIGH);
+      digitalWrite(RIGHT_IN2_PIN, LOW);
+      Right_Done = true;
     }
-    Serial.print(" Right Speed: ");
-    Serial.print(motorSpeedRight);
-    Serial.print(" Right Count: ");
-    Serial.println(encoderPosRight);
-    bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
-    bt.print(motorSpeedRight);
-    bt.print(" Right Count: ");
-    bt.print(encoderPosRight);
-    analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
+    else if (Right_Done != true)
+    {
+      int motorSpeedRight = pidRight.compute(encoderPosRight);
+      if (encoderPosRight < Back_targetDistanceRight)
+      {
+        digitalWrite(RIGHT_IN1_PIN, HIGH);
+        digitalWrite(RIGHT_IN2_PIN, LOW);
+      }
+      else
+      {
+        digitalWrite(RIGHT_IN1_PIN, LOW);
+        digitalWrite(RIGHT_IN2_PIN, HIGH);
+      }
+      //    Serial.print(" Right Speed: ");
+      //    Serial.print(motorSpeedRight);
+      //    Serial.print(" Right Count: ");
+      //    Serial.println(encoderPosRight);
+      //    bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
+      //    bt.print(motorSpeedRight);
+      //    bt.print(" Right Count: ");
+      //    bt.print(encoderPosRight);
+      analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
+    }
+    //  bt.println(" ");
+    //  Serial.println(" ");
+    delay(100);
+    if (Left_Done == true and Right_Done == true)
+    {
+      Both_Done = true;
+      digitalWrite(STANDBY_PIN, LOW);
+      encoderPosRight -= Back_targetDistanceRight;
+      encoderPosLeft -= Back_targetDistanceLeft;
+    }
   }
-  bt.println(" ");
-  Serial.println(" ");
-  if (Left_Done == true and Right_Done == true)
-  {
-    Both_Done = true;
-    digitalWrite(STANDBY_PIN, LOW);
-    encoderPosRight -= Back_targetDistanceRight;
-    encoderPosLeft -= Back_targetDistanceLeft;
-  }
- }
- Encoder_Readings();
+  Encoder_Readings();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

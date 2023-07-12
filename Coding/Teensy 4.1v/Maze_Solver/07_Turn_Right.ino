@@ -31,14 +31,14 @@ void Turn_Right(int targetDistanceLeft = RightrotationTargetDistanceLeft, int ta
         digitalWrite(LEFT_IN1_PIN, LOW);
         digitalWrite(LEFT_IN2_PIN, HIGH);
       }
-      Serial.print("Left Speed: ");
-      Serial.print(motorSpeedLeft);
-      Serial.print(" Left Count: ");
-      Serial.print(encoderPosLeft);
-      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
-      bt.print(motorSpeedLeft);
-      bt.print(" Left Count: ");
-      bt.print(encoderPosLeft);
+//      Serial.print("Left Speed: ");
+//      Serial.print(motorSpeedLeft);
+//      Serial.print(" Left Count: ");
+//      Serial.print(encoderPosLeft);
+//      bt.print("Left Speed: ");     // BT MODULE (RX3 TX3)
+//      bt.print(motorSpeedLeft);
+//      bt.print(" Left Count: ");
+//      bt.print(encoderPosLeft);
       analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
     }
     if (encoderPosRight == targetDistanceRight)
@@ -61,18 +61,20 @@ void Turn_Right(int targetDistanceLeft = RightrotationTargetDistanceLeft, int ta
         digitalWrite(RIGHT_IN1_PIN, LOW);
         digitalWrite(RIGHT_IN2_PIN, HIGH);
       }
-      Serial.print(" Right Speed: ");
-      Serial.print(motorSpeedRight);
-      Serial.print(" Right Count: ");
-      Serial.println(encoderPosRight);
-      bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
-      bt.print(motorSpeedRight);
-      bt.print(" Right Count: ");
-      bt.print(encoderPosRight);
+//      Serial.print(" Right Speed: ");
+//      Serial.print(motorSpeedRight);
+//      Serial.print(" Right Count: ");
+//      Serial.println(encoderPosRight);
+//      bt.print(" Right Speed: "); // BT MODULE (RX3 TX3)
+//      bt.print(motorSpeedRight);
+//      bt.print(" Right Count: ");
+//      bt.print(encoderPosRight);
       analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
     }
-    bt.println(" ");
-    Serial.println(" ");
+//    bt.println(" ");
+//    Serial.println(" ");
+    delay(100);
+
     if (Left_Done == true and Right_Done == true)
     {
       Both_Done = true;

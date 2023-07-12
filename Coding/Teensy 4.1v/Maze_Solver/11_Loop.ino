@@ -14,21 +14,11 @@ void loop()
       startButtonPressed = true;
     }
   }
+  Move_Forward(Home_cell_forward, Home_cell_forward);
+  startButtonPressed = false;
+  flood_fill(&mazes , Glob_startX, Glob_startY, Glob_destX, Glob_destY);
+  print_maze(&mazes);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //void loop()
 //{

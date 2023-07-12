@@ -9,7 +9,7 @@
 int Glob_destX = 8;
 int Glob_destY = 8;
 int Glob_startX = 0;
-int Glob_startY = 15;
+int Glob_startY = 14;
 int MAZE_SIZE = 16;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 int currentOrientation = NORTH; // Global variable for current orientation
@@ -101,7 +101,11 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
   maze->cells[x][y].visited = true;
 
   // Continue until the stack is empty
-  while (top >= 0) {
+  while (top >= 0)
+  {
+    Serial.println("start of loop");
+    bt.println("start of loop");
+
     // Pop the top cell from the stack
     int currentX = stack[top].x;
     int currentY = stack[top].y;
@@ -188,6 +192,9 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.println(currentOrientation);
       print_maze(maze);
     }
+    Serial.println("end of loop");
+    bt.println("end of loop");
+
     Pause(maze);
   }
 }
