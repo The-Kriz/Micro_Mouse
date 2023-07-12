@@ -99,7 +99,9 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       stack[top].y = currentY;
       maze->cells[currentX + 1][currentY].visited = true;
       Turn_Right(); // Turn towards the next cell
+      //print(right turn)
       update_orientation_right();
+      //print(currentOrientation)
     }
     if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX - 1][currentY].centre == 0)
     {
@@ -107,7 +109,9 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       stack[top].y = currentY;
       maze->cells[currentX - 1][currentY].visited = true;
       Turn_Left(); // Turn towards the next cell
+      //print(left turn)
       update_orientation_left();
+      //print(currentOrientation)
     }
     if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY + 1].centre == 0)
     {
@@ -116,7 +120,9 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       maze->cells[currentX][currentY + 1].visited = true;
       // No need to turn as the bot is already oriented towards the next cell Move Forward
       Move_Forward();
+      //print(forward)
       update_orientation_forward(currentOrientation);
+      //print(currentOrientation)
     }
     if (currentY - 1 >= 0 && !maze->cells[currentX][currentY - 1].visited && maze->cells[currentX][currentY - 1].centre == 0)
     {
@@ -124,8 +130,11 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       stack[top].y = currentY - 1;
       maze->cells[currentX][currentY - 1].visited = true;
       U_Turn();
+      //print(uturn)
       update_orientation_right();
       update_orientation_right();
+      //print(currentOrientation)
+      
     }
   }
 }
