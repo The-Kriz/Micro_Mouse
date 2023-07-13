@@ -122,7 +122,7 @@ void print_maze(struct maze *maze)
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-void print_current_cell(struct maze* maze, int x, int y) 
+void print_current_cell(struct maze* maze, int x, int y)
 {
   struct cell currentCell = maze->cells[x][y];
   Serial.println("Current Cell Information:");
@@ -177,20 +177,40 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
   {
     Serial.println("start of loop");
     bt.println("start of loop");
-    
-    print_current_cell(maze,currentX,currentY) 
+
 
     // Pop the top cell from the stack
     int currentX = stack[top].x;
     int currentY = stack[top].y;
     top--;
+    print_current_cell(maze, currentX, currentY);
+
 
     // Check if the current cell is the destination
     if (currentX == destX && currentY == destY)
       return;
 
     //update walls for the current cell if needed
-    update_walls_based_on_orientation(maze, currentX, currentY, Direction, Left_Wall(), Center_Wall(), Right_Wall());
+    int Wall_On_left = Left_Wall();
+    int Wall_On_Center = Center_Wall();
+    int Wall_On_Right = Right_Wall();
+
+    Serial.print("Wall_On_left: ");
+    Serial.println(Wall_On_left);
+    Serial.print("Wall_On_Center: ");
+    Serial.println(Wall_On_Center);
+    Serial.print("Wall_On_Right: ");
+    Serial.println(Wall_On_Right);
+
+    bt.print("Wall_On_left: ");
+    bt.println(Wall_On_left);
+    bt.print("Wall_On_Center: ");
+    bt.println(Wall_On_Center);
+    bt.print("Wall_On_Right: ");
+    bt.println(Wall_On_Right);
+
+
+    update_walls_based_on_orientation(maze, currentX, currentY, Direction, Wall_On_left, Wall_On_Center, Wall_On_Right);
     leds[0] = CRGB::Black;
     FastLED.show();
 
@@ -272,7 +292,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
     Serial.println("end of loop");
     bt.println("end of loop");
 
-//    Pause(maze);
+    //    Pause(maze);
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
