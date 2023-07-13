@@ -122,6 +122,41 @@ void print_maze(struct maze *maze)
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+void print_current_cell(struct maze* maze, int x, int y) 
+{
+  struct cell currentCell = maze->cells[x][y];
+  Serial.println("Current Cell Information:");
+  Serial.print("Coordinates: (");
+  Serial.print(currentCell.x);
+  Serial.print(", ");
+  Serial.print(currentCell.y);
+  Serial.println(")");
+  Serial.print("Left Wall: ");
+  Serial.println(currentCell.left);
+  Serial.print("Right Wall: ");
+  Serial.println(currentCell.right);
+  Serial.print("Centre Wall: ");
+  Serial.println(currentCell.centre);
+  Serial.print("Visited: ");
+  Serial.println(currentCell.visited ? "Yes" : "No");
+
+  bt.println("Current Cell Information:");
+  bt.print("Coordinates: (");
+  bt.print(currentCell.x);
+  bt.print(", ");
+  bt.print(currentCell.y);
+  bt.println(")");
+  bt.print("Left Wall: ");
+  bt.println(currentCell.left);
+  bt.print("Right Wall: ");
+  bt.println(currentCell.right);
+  bt.print("Centre Wall: ");
+  bt.println(currentCell.centre);
+  bt.print("Visited: ");
+  bt.println(currentCell.visited ? "Yes" : "No");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Flood fill algorithm with destination in the center of the maze
 {
   // Create a stack to store cell coordinates
@@ -142,6 +177,8 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
   {
     Serial.println("start of loop");
     bt.println("start of loop");
+    
+    print_current_cell(maze,currentX,currentY) 
 
     // Pop the top cell from the stack
     int currentX = stack[top].x;
@@ -235,7 +272,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
     Serial.println("end of loop");
     bt.println("end of loop");
 
-    Pause(maze);
+//    Pause(maze);
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
