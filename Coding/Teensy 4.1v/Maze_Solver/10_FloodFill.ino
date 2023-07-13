@@ -6,14 +6,14 @@
 #define EAST 1
 #define SOUTH 2
 #define WEST 3
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+int currentOrientation = NORTH; // Global variable for current orientation
 int Glob_destX = 8;
 int Glob_destY = 8;
 int Glob_startX = 0;
 int Glob_startY = 14;
 int MAZE_SIZE = 16;
-int direction = 0
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-int currentOrientation = NORTH; // Global variable for current orientation
+int Direction = 0;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 int orient = 0;              // Initial orientation
 struct cell                 // Define the cell struct
@@ -66,41 +66,41 @@ void update_orientation_forward(int moveOrientation) // Function to update the o
   currentOrientation = moveOrientation;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-void update_walls_based_on_orientation(struct maze* maze, int x, int y, int direction, int left_wall, int right_wall, int centre_wall) {
+void update_walls_based_on_orientation(struct maze* maze, int x, int y, int Direction, int left_wall, int right_wall, int centre_wall) {
   switch (currentOrientation) {
     case NORTH:
-      if (direction == 0)
+      if (Direction == 0)
         update_walls(maze, x, y - 1, left_wall, right_wall, centre_wall);
-      else if (direction == 2)
+      else if (Direction == 2)
         update_walls(maze, x - 1, y, left_wall, right_wall, centre_wall);
-      else if (direction == 1)
+      else if (Direction == 1)
         update_walls(maze, x + 1, y, left_wall, right_wall, centre_wall);
       break;
     case EAST:
-      if (direction == 0)
+      if (Direction == 0)
         update_walls(maze, x + 1, y, left_wall, right_wall, centre_wall);
-      else if (direction == 2)
+      else if (Direction == 2)
         update_walls(maze, x, y - 1, left_wall, right_wall, centre_wall);
-      else if (direction == 1)
+      else if (Direction == 1)
         update_walls(maze, x, y + 1, left_wall, right_wall, centre_wall);
       break;
     case SOUTH:
-      if (direction == 0)
+      if (Direction == 0)
         update_walls(maze, x, y + 1, left_wall, right_wall, centre_wall);
-      else if (direction == 2)
+      else if (Direction == 2)
         update_walls(maze, x + 1, y, left_wall, right_wall, centre_wall);
-      else if (direction == 1)
+      else if (Direction == 1)
         update_walls(maze, x - 1, y, left_wall, right_wall, centre_wall);
       break;
     case WEST:
-      if (direction == 0)
+      if (Direction == 0)
         update_walls(maze, x - 1, y, left_wall, right_wall, centre_wall);
-      else if (direction == 2)
+      else if (Direction == 2)
         update_walls(maze, x, y + 1, left_wall, right_wall, centre_wall);
-      else if (direction == 1)
+      else if (Direction == 1)
         update_walls(maze, x, y - 1, left_wall, right_wall, centre_wall);
-      break;
-  }
+      break;
+  }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 void print_maze(struct maze *maze)
@@ -153,12 +153,12 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       return;
 
     //update walls for the current cell if needed
-    update_walls_based_on_orientation(&maze, currentX, currentY, Left_Wall(), Center_Wall(), Right_Wall());
+    update_walls_based_on_orientation(maze, currentX, currentY, Direction, Left_Wall(), Center_Wall(), Right_Wall());
     leds[0] = CRGB::Black;
     FastLED.show();
 
     // Check neighboring cells
-    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX][currentY-1].right == 0)
+    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX][currentY - 1].right == 0)
     {
       stack[++top].x = currentX + 1;
       stack[top].y = currentY;
@@ -174,10 +174,10 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.print("Current Orientation :");
       bt.println(currentOrientation);
       print_maze(maze);
-      direction=1;
+      Direction = 1;
 
     }
-    else if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX][currentY-1].left == 0)
+    else if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX][currentY - 1].left == 0)
     {
       stack[++top].x = currentX - 1;
       stack[top].y = currentY;
@@ -193,9 +193,9 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.print("Current Orientation :");
       bt.println(currentOrientation);
       print_maze(maze);
-      direction=2;
+      Direction = 2;
     }
-    else if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY-1].centre == 0)
+    else if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY - 1].centre == 0)
     {
       stack[++top].x = currentX;
       stack[top].y = currentY + 1;
@@ -212,7 +212,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       bt.print("Current Orientation :");
       bt.println(currentOrientation);
       print_maze(maze);
-      direction=0;
+      Direction = 0;
     }
     else if (currentY - 1 >= 0 && !maze->cells[currentX][currentY - 1].visited && !maze->cells[currentX][currentY].centre == 0 && !maze->cells[currentX][currentY].left == 0 && !maze->cells[currentX][currentY].left == 0)
     {
