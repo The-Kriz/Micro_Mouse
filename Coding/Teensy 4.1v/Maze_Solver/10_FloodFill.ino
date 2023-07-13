@@ -158,7 +158,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
     FastLED.show();
 
     // Check neighboring cells
-    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && maze->cells[currentX][currentY].right == 0)
+    if (currentX + 1 < MAZE_SIZE && !maze->cells[currentX + 1][currentY].visited && !maze->cells[currentX][currentY].right == 0)
     {
       stack[++top].x = currentX + 1;
       stack[top].y = currentY;
@@ -177,7 +177,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       Direction = 1;
 
     }
-    else if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && maze->cells[currentX][currentY].left == 0)
+    else if (currentX - 1 >= 0 && !maze->cells[currentX - 1][currentY].visited && !maze->cells[currentX][currentY].left == 0)
     {
       stack[++top].x = currentX - 1;
       stack[top].y = currentY;
@@ -195,7 +195,7 @@ void flood_fill(struct maze *maze, int x, int y, int destX, int destY)   // Floo
       print_maze(maze);
       Direction = 2;
     }
-    else if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && maze->cells[currentX][currentY].centre == 0)
+    else if (currentY + 1 < MAZE_SIZE && !maze->cells[currentX][currentY + 1].visited && !maze->cells[currentX][currentY].centre == 0)
     {
       stack[++top].x = currentX;
       stack[top].y = currentY + 1;
