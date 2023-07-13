@@ -73,6 +73,6 @@ void Pause(struct maze *mazes)
       startButtonPressed = true;
     }
   }
-  print_maze(mazes);
+//  print_maze(mazes);
   startButtonPressed = false;
 }

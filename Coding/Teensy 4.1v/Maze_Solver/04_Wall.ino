@@ -10,11 +10,11 @@ bool Left_Wall()
   {
     leds[0] = CRGB::Blue;
     FastLED.show();
-    return true;
+    return 1;
   }
   else
   {
-    return false;
+    return 0;
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,11 +29,11 @@ bool Center_Wall()
   {
     leds[0] = CRGB::Amethyst;
     FastLED.show();
-    return true;
+    return 1;
   }
   else
   {
-    return false;
+    return 0;
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,11 +48,11 @@ bool Right_Wall()
   {
     leds[0] = CRGB::BlueViolet;
     FastLED.show();
-    return true;
+    return 1;
   }
   else
   {
-    return false;
+    return 0;
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
