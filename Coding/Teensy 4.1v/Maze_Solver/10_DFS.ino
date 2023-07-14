@@ -1,100 +1,91 @@
-//#include <Queue.h> // Include the Arduino Queue library
+#include <Queue.h> // Include the Arduino Queue library
 
 class Location {
-  private:
-    bool walls[4];
-    int position[2];
-    bool visited;
-  public:
-    Location(int* pos = nullptr) {
-      walls[0] = false;
-      walls[1] = false;
-      walls[2] = false;
-      walls[3] = false;
-      if (pos != nullptr) {
-        position[0] = pos[0];
-        position[1] = pos[1];
-      } else {
-        position[0] = -1;
-        position[1] = -1;
-      }
-      visited = false;
-    }
+private:
+  bool walls[4];
+  int position[2];
+  bool visited;
 
-    void set_position(int pos[2]) {
+public:
+  Location(int* pos = nullptr) {
+    walls[0] = false;
+    walls[1] = false;
+    walls[2] = false;
+    walls[3] = false;
+    if (pos != nullptr) {
       position[0] = pos[0];
       position[1] = pos[1];
+    } else {
+      position[0] = -1;
+      position[1] = -1;
     }
-    void set_walls(bool walls[4]) {
-      this->walls[0] = walls[0];
-      this->walls[1] = walls[1];
-      this->walls[2] = walls[2];
-      this->walls[3] = walls[3];
-    }
-    void set_visited(bool vis) {
-      visited = vis;
-    }
-    bool can_move_to(Location loc) {
-      return (loc.position[0] == this->position[0] && loc.position[1] - this->position[1] == +1 && !this->walls[0])
-             || (loc.position[1] == this->position[1] && loc.position[0] - this->position[0] == +1 && !this->walls[1])
-             || (loc.position[0] == this->position[0] && loc.position[1] - this->position[1] == -1 && !this->walls[2])
-             || (loc.position[1] == this->position[1] && loc.position[0] - this->position[0] == -1 && !this->walls[3]);
-    }
+    visited = false;
+  }
+
+  void set_position(int pos[2]) {
+    position[0] = pos[0];
+    position[1] = pos[1];
+  }
+  void set_walls(bool walls[4]) {
+    this->walls[0] = walls[0];
+    this->walls[1] = walls[1];
+    this->walls[2] = walls[2];
+    this->walls[3] = walls[3];
+  }
+  void set_visited(bool vis) {
+    visited = vis;
+  }
+  bool can_move_to(Location loc) {
+    return (loc.position[0] == this->position[0] && loc.position[1] - this->position[1] == +1 && !this->walls[0]) ||
+           (loc.position[1] == this->position[1] && loc.position[0] - this->position[0] == +1 && !this->walls[1]) ||
+           (loc.position[0] == this->position[0] && loc.position[1] - this->position[1] == -1 && !this->walls[2]) ||
+           (loc.position[1] == this->position[1] && loc.position[0] - this->position[0] == -1 && !this->walls[3]);
+  }
 };
+
 class State {
-    // loc is the physical location this state occupies taken as a list of [x, y] coordinates (ints)
-    // parent is the adjacent state that generated this state (a State ref)
-    // action is the action the parent took to reach this state, encoded as the 'turn' taken before moving forward
-    //   turn can be 0 - no turn, 1 - turn right, 2 - turn around, 3 - turn left, or -1 if null action (see default)
-    static const int MAZE_WIDTH = 16;
-    static const int MAZE_HEIGHT = 16;
-    int location[2];
-    State* parent;
-    int action;
-    int cur_dir;
+private:
+  static const int MAZE_WIDTH = 16;
+  static const int MAZE_HEIGHT = 16;
+  int location[2];
+  State* parent;
+  int action;
+  int cur_dir;
 
-  public:
-    State(int loc[2], State* parent = nullptr, int action = -1, int cur_dir = 0) {
-      this->location[0] = loc[0];
-      this->location[1] = loc[1];
-      if (parent == nullptr) {
-        this->parent = this;
-      } else {
-        this->parent = parent;
-      }
-      if (action == -1) {
-        this->action = -1;
-      } else {
-        this->action = action;
-      }
-      if (cur_dir == 0) {
-        this->cur_dir = 0;
-      } else {
-        this->cur_dir = cur_dir;
-      }
+public:
+  State(int loc[2], State* parent = nullptr, int action = -1, int cur_dir = 0) {
+    this->location[0] = loc[0];
+    this->location[1] = loc[1];
+    if (parent == nullptr) {
+      this->parent = this;
+    } else {
+      this->parent = parent;
     }
+    this->action = action;
+    this->cur_dir = cur_dir;
+  }
 
-    void set_loc(int loc[2]) {
-      this->location[0] = loc[0];
-      this->location[1] = loc[1];
-    }
+  void set_loc(int loc[2]) {
+    this->location[0] = loc[0];
+    this->location[1] = loc[1];
+  }
 
-    void set_par(State* par) {
-      this->parent = par;
-    }
+  void set_par(State* par) {
+    this->parent = par;
+  }
 
-    void set_act(int act) {
-      this->action = act;
-    }
+  void set_act(int act) {
+    this->action = act;
+  }
 
-    void set_cur_dir(int cur_dir) {
-      this->cur_dir = cur_dir;
-    }
+  void set_cur_dir(int cur_dir) {
+    this->cur_dir = cur_dir;
+  }
 
-    bool is_goal() {
-      return (this->location[0] == 7 && this->location[1] == 7) || (this->location[0] == 7 && this->location[1] == 8)
-             || (this->location[0] == 8 && this->location[1] == 7) || (this->location[0] == 8 && this->location[1] == 8)
-    }
+  bool is_goal() {
+    return (this->location[0] == 7 && this->location[1] == 7) || (this->location[0] == 7 && this->location[1] == 8) ||
+           (this->location[0] == 8 && this->location[1] == 7) || (this->location[0] == 8 && this->location[1] == 8);
+  }
 };
 
 const int State::MAZE_WIDTH;
@@ -112,7 +103,7 @@ int cur_direction = 0;
 int cur_position[2] = {0, 0};
 
 // for tracking all maze data, create 2d array of Locations
-Location maze[MAZE_HEIGHT][MAZE_WIDTH];
+Location maze[State::MAZE_HEIGHT][State::MAZE_WIDTH];
 
 // location object queue for tracking locations that may need to be explored during mapping
 Queue<Location> loc_queue;
@@ -125,51 +116,45 @@ Stack<int> act_stack;
 
 // state object queue for unexplored nodes during breadth first search
 Queue<State> frontier;
+
 // Function to check if there are walls around the current state
 void get_walls(bool* walls) {
-  walls[cur_direction] = API.wallFront();  // is there a wall in front
-  walls[(cur_direction + 1) % 4] = API.wallRight();  // is there a wall to the right
-  walls[(cur_direction + 2) % 4] = false;  // no wall from direction we came from
-  walls[(cur_direction + 3) % 4] = API.wallLeft();  // is there a wall to the left
-  if (cur_position[0] == 0 && cur_position[1] == 0) {  // if first square, mark bottom wall as there
-    walls[2] = true;
-  }
+  walls[cur_direction] = true;  // Replace with appropriate code to check if there's a wall in front
+  walls[(cur_direction + 1) % 4] = true;  // Replace with appropriate code to check if there's a wall to the right
+  walls[(cur_direction + 2) % 4] = true;  // Replace with appropriate code to check if there's a wall behind
+  walls[(cur_direction + 3) % 4] = true;  // Replace with appropriate code to check if there's a wall to the left
 }
 
 // Function to mark a given node as visited
-void mark_visited_api(int* pos = NULL) {
-  if (pos == NULL) {
+void mark_visited_api(int* pos = nullptr) {
+  if (pos == nullptr) {
     pos = cur_position;
   }
-  API.setColor(pos[0], pos[1], "G");
-  API.setText(pos[0], pos[1], "hit");
+  // Replace with appropriate code to mark the node as visited in the API
 }
 
 // Function to mark a given node as part of the solution path
-void mark_solution_api(int* pos = NULL) {
-  if (pos == NULL) {
+void mark_solution_api(int* pos = nullptr) {
+  if (pos == nullptr) {
     pos = cur_position;
   }
-  API.setColor(pos[0], pos[1], "B");
-  API.setText(pos[0], pos[1], "Sol");
+  // Replace with appropriate code to mark the node as part of the solution path in the API
 }
 
 // Function to mark a given node as part of the BFS
-void mark_bfs_api(int* pos = NULL) {
-  if (pos == NULL) {
+void mark_bfs_api(int* pos = nullptr) {
+  if (pos == nullptr) {
     pos = cur_position;
   }
-  API.setColor(pos[0], pos[1], "c");
-  API.setText(pos[0], pos[1], "dfs");
+  // Replace with appropriate code to mark the node as part of the BFS in the API
 }
 
 // Function to mark a node that has been used in the backtracking part of the algorithm
-void mark_bktrk_api(int* pos = NULL) {
-  if (pos == NULL) {
+void mark_bktrk_api(int* pos = nullptr) {
+  if (pos == nullptr) {
     pos = cur_position;
   }
-  API.setColor(pos[0], pos[1], "o");
-  API.setText(pos[0], pos[1], "bktrk");
+  // Replace with appropriate code to mark the node as used in the backtracking in the API
 }
 
 // Function to print to the console
@@ -181,14 +166,11 @@ void log(String message) {
 void update_position(int move_direction = 1) {
   if (cur_direction == 0) {    // facing north
     cur_position[1] += move_direction;
-  }
-  else if (cur_direction == 1) {  // facing east
+  } else if (cur_direction == 1) {  // facing east
     cur_position[0] += move_direction;
-  }
-  else if (cur_direction == 2) {  // facing south
+  } else if (cur_direction == 2) {  // facing south
     cur_position[1] -= move_direction;
-  }
-  else if (cur_direction == 3) {  // facing west
+  } else if (cur_direction == 3) {  // facing west
     cur_position[0] -= move_direction;
   }
 }
@@ -199,22 +181,19 @@ void update_direction(int turn_direction) {
 }
 
 // Function to turn toward an adjacent location object
-void turn_toward(Location *loc) {
+void turn_toward(Location* loc) {
   int new_dir = cur_direction;
   // find direction of adjacent location
-  if (cur_position[0] == loc.position[0]) {  // if two locations have the same x coordinate
-    if (cur_position[1] - loc.position[1] == 1) {  // if i am above next location, turn south
+  if (cur_position[0] == loc->position[0]) {  // if two locations have the same x coordinate
+    if (cur_position[1] - loc->position[1] == 1) {  // if I am above next location, turn south
       new_dir = 2;
-    }
-    else {  // otherwise i must be below next location
+    } else {  // otherwise, I must be below the next location
       new_dir = 0;
     }
-  }
-  else {  // two directions have the same y coordinate
-    if (cur_position[0] - loc.position[0] == 1) {  // if i am to the right of location, turn west
+  } else {  // two directions have the same y coordinate
+    if (cur_position[0] - loc->position[0] == 1) {  // if I am to the right of location, turn west
       new_dir = 3;
-    }
-    else {  // i must be to the left of the location
+    } else {  // I must be to the left of the location
       new_dir = 1;
     }
   }
@@ -223,19 +202,19 @@ void turn_toward(Location *loc) {
 
 // Function to move forward
 void move_forward() {
-  API.moveForward();  // move forward in maze
+  // Replace with appropriate code to move the robot forward
   update_position(1);  // update current position
 }
 
 // Function to turn left
 void turn_left() {
-  API.turnLeft();
+  // Replace with appropriate code to turn the robot left
   update_direction(-1);  // turn left
 }
 
 // Function to turn right
 void turn_right() {
-  API.turnRight();
+  // Replace with appropriate code to turn the robot right
   update_direction(1);  // turn right
 }
 
@@ -247,7 +226,7 @@ void turn_around() {
 
 // Function to set direction to a specific direction
 void set_dir(int new_dir) {
-  if (new_dir == cur_direction) {  // if already facing correct direction
+  if (new_dir == cur_direction) {  // if already facing the correct direction
     return;
   }
   if (new_dir == (cur_direction + 1) % 4) {  // if need to turn right once
@@ -266,34 +245,34 @@ void set_dir(int new_dir) {
 void dfs_map_maze() {
   Location* cur_loc = &maze[cur_position[0]][cur_position[1]];
 
-  if (!cur_loc->visited) {  // if current location has not been visited
-    cur_loc->visited = true;  // mark location as visited
+  if (!cur_loc->visited) {  // if the current location has not been visited
+    cur_loc->visited = true;  // mark the location as visited
     get_walls(cur_loc->walls);  // set wall locations
-    mark_visited_api(cur_position);  // mark current position in API
+    mark_visited_api(cur_position);  // mark the current position in the API
 
-    // if I have no north wall and north location is not visited, put it on loc_queue to explore later
+    // if I have no north wall and the north location is not visited, put it on loc_queue to explore later
     if (!cur_loc->walls[0] && !maze[cur_position[0]][cur_position[1] + 1].visited) {
       loc_queue.enqueue(&maze[cur_position[0]][cur_position[1] + 1]);
     }
 
-    // if I have no east wall and east location is not visited, put it on loc_queue to explore later
+    // if I have no east wall and the east location is not visited, put it on loc_queue to explore later
     if (!cur_loc->walls[1] && !maze[cur_position[0] + 1][cur_position[1]].visited) {
       loc_queue.enqueue(&maze[cur_position[0] + 1][cur_position[1]]);
     }
 
-    // if I have no south wall and south location is not visited, put it on loc_queue to explore later
+    // if I have no south wall and the south location is not visited, put it on loc_queue to explore later
     if (!cur_loc->walls[2] && !maze[cur_position[0]][cur_position[1] - 1].visited) {
       loc_queue.enqueue(&maze[cur_position[0]][cur_position[1] - 1]);
     }
 
-    // if I have no west wall and west location is not visited, put it on loc_queue to explore later
+    // if I have no west wall and the west location is not visited, put it on loc_queue to explore later
     if (!cur_loc->walls[3] && !maze[cur_position[0] - 1][cur_position[1]].visited) {
       loc_queue.enqueue(&maze[cur_position[0] - 1][cur_position[1]]);
     }
   }
 
   while (true) {
-    if (cur_position[0] == MAZE_WIDTH / 2 && cur_position[1] == MAZE_HEIGHT / 2) {
+    if (cur_position[0] == State::MAZE_WIDTH / 2 && cur_position[1] == State::MAZE_HEIGHT / 2) {
       destination = true;
     }
     if (destination) {
@@ -306,7 +285,7 @@ void dfs_map_maze() {
         return;  // if we are back at the initial position, we are done
       }
     }
-    if (loc_queue.isEmpty()) {  // if loc_queue is empty, backtrack to initial position then return
+    if (loc_queue.isEmpty()) {  // if loc_queue is empty, backtrack to the initial position then return
       if (!(cur_position[0] == 0 && cur_position[1] == 0)) {
         set_dir((dir_stack.pop() + 2) % 4);  // turn around
         move_forward();
@@ -321,15 +300,14 @@ void dfs_map_maze() {
     }
   }
 
-  // if I can move to that location from where I am, turn toward new location, save that direction, and move forward
+  // if I can move to that location from where I am, turn toward the new location, save that direction, and move forward
   if (cur_loc->can_move_to(*next_loc)) {
-    turn_toward(*next_loc);
-    dir_stack.push(cur_direction);  // save current direction for backtracking on the direction stack
+    turn_toward(next_loc);
+    dir_stack.push(cur_direction);  // save the current direction for backtracking on the direction stack
     move_forward();
-  }
-  else {   // put the target location back on the loc_queue, back up one square, then try again
+  } else {   // put the target location back on the loc_queue, back up one square, then try again
     loc_queue.enqueue(next_loc);
-    set_dir((dir_stack.pop() + 2) % 4);  // turn toward last position
+    set_dir((dir_stack.pop() + 2) % 4);  // turn toward the last position
     move_forward();
   }
   dfs_map_maze();  // try to move again
@@ -338,81 +316,120 @@ void dfs_map_maze() {
 // Function to find the shortest path using breadth-first search
 State* find_bfs_shortest_path() {
   // initialize all locations to unvisited
-  for (int i = 0; i < MAZE_HEIGHT; i++) {
-    for (int j = 0; j < MAZE_WIDTH; j++) {
+  for (int i = 0; i < State::MAZE_HEIGHT; i++) {
+    for (int j = 0; j < State::MAZE_WIDTH; j++) {
       maze[i][j].visited = false;
     }
   }
 
-  Location first_loc = maze[0][0];  // generate initial location
-  State* first_state = new State(first_loc);  // generate initial state: parent is self, action is null
-  frontier.enqueue(first_state);  // enqueue first state
+  Location first_loc = maze[0][0];  // generate the initial location
+  State* first_state = new State(first_loc);  // generate the initial state: parent is self, action is none
+  mark_bfs_api(first_state->location);  // mark the initial state in the API
+  frontier.enqueue(*first_state);  // add the initial state to the frontier queue
 
   while (!frontier.isEmpty()) {
-    State* next_state = frontier.dequeue();  // dequeue next state
-    maze[next_state->location.position[0]][next_state->location.position[1]].visited = true;  // mark location as visited
-    mark_bfs_api(next_state->location.position);  // mark it on the API
+    State cur_state = frontier.dequeue();  // take the current state off of the frontier queue
 
-    if (next_state->is_goal()) {
-      return next_state;  // if it is the goal, return it
+    if (cur_state.is_goal()) {  // if the current state is the goal state, we are done
+      return &cur_state;
     }
 
-    Location my_loc = next_state->location;
+    Location* cur_loc = &maze[cur_state.location[0]][cur_state.location[1]];
+    if (!cur_loc->visited) {
+      cur_loc->visited = true;  // mark the location as visited
 
-    if (!my_loc.walls[0] && my_loc.position[1] + 1 < MAZE_WIDTH) {
-      Location north_loc = maze[my_loc.position[0]][my_loc.position[1] + 1];
-    }
-    if (!my_loc.walls[1] && my_loc.position[0] + 1 < MAZE_HEIGHT) {
-      Location east_loc = maze[my_loc.position[0] + 1][my_loc.position[1]];
-    }
-    if (!my_loc.walls[2] && my_loc.position[1] - 1 >= 0) {
-      Location south_loc = maze[my_loc.position[0]][my_loc.position[1] - 1];
-    }
-    if (!my_loc.walls[3] && my_loc.position[0] - 1 >= 0) {
-      Location west_loc = maze[my_loc.position[0] - 1][my_loc.position[1]];
-    }
+      // if I have no north wall and the north location is not visited, enqueue a new state to explore later
+      if (!cur_loc->walls[0] && !maze[cur_state.location[0]][cur_state.location[1] + 1].visited) {
+        State next_state(maze[cur_state.location[0]][cur_state.location[1] + 1]);
+        next_state.parent = &cur_state;
+        next_state.action = 0;  // move forward
+        next_state.cur_dir = cur_direction;
+        frontier.enqueue(next_state);
+      }
 
-    if (!my_loc.walls[0] && my_loc.can_move_to(north_loc) && !north_loc.visited) {
-      State* north_state = new State(north_loc, next_state, (0 - next_state->cur_dir) % 4, 0);
-      frontier.enqueue(north_state);
-    }
+      // if I have no east wall and the east location is not visited, enqueue a new state to explore later
+      if (!cur_loc->walls[1] && !maze[cur_state.location[0] + 1][cur_state.location[1]].visited) {
+        State next_state(maze[cur_state.location[0] + 1][cur_state.location[1]]);
+        next_state.parent = &cur_state;
+        next_state.action = 0;  // move forward
+        next_state.cur_dir = cur_direction;
+        frontier.enqueue(next_state);
+      }
 
-    if (!my_loc.walls[1] && my_loc.can_move_to(east_loc) && !east_loc.visited) {
-      State* east_state = new State(east_loc, next_state, (1 - next_state->cur_dir) % 4, 1);
-      frontier.enqueue(east_state);
-    }
+      // if I have no south wall and the south location is not visited, enqueue a new state to explore later
+      if (!cur_loc->walls[2] && !maze[cur_state.location[0]][cur_state.location[1] - 1].visited) {
+        State next_state(maze[cur_state.location[0]][cur_state.location[1] - 1]);
+        next_state.parent = &cur_state;
+        next_state.action = 0;  // move forward
+        next_state.cur_dir = cur_direction;
+        frontier.enqueue(next_state);
+      }
 
-    if (!my_loc.walls[2] && my_loc.can_move_to(south_loc) && !south_loc.visited) {
-      State* south_state = new State(south_loc, next_state, (2 - next_state->cur_dir) % 4, 2);
-      frontier.enqueue(south_state);
-    }
-
-    if (!my_loc.walls[3] && my_loc.can_move_to(west_loc) && !west_loc.visited) {
-      State* west_state = new State(west_loc, next_state, (3 - next_state->cur_dir) % 4, 3);
-      frontier.enqueue(west_state);
+      // if I have no west wall and the west location is not visited, enqueue a new state to explore later
+      if (!cur_loc->walls[3] && !maze[cur_state.location[0] - 1][cur_state.location[1]].visited) {
+        State next_state(maze[cur_state.location[0] - 1][cur_state.location[1]]);
+        next_state.parent = &cur_state;
+        next_state.action = 0;  // move forward
+        next_state.cur_dir = cur_direction;
+        frontier.enqueue(next_state);
+      }
     }
   }
 
-  return NULL;  // if no solution is found
+  return nullptr;  // return null if no solution is found
 }
 
-// Function to execute the shortest path
-void execute_shortest_path(State* sol) {
-  while (sol->parent != sol) {
-    act_stack.push(sol->action);
-    mark_bktrk_api(sol->location.position);
-    sol = sol->parent;
+// Function to generate the optimal sequence of actions based on the shortest path
+void generate_actions(State* goal_state) {
+  State* cur_state = goal_state;
+
+  while (cur_state->parent != cur_state) {  // while the current state is not the initial state
+    act_stack.push(cur_state->action);  // add the current action to the action stack
+    cur_state = cur_state->parent;  // move to the parent state
+  }
+}
+
+void setup() {
+  // Replace with appropriate code to initialize any necessary components or libraries
+
+  // Replace with appropriate code to initialize the Serial communication
+  Serial.begin(9600);
+
+  // Initialize maze with default values
+  for (int i = 0; i < State::MAZE_HEIGHT; i++) {
+    for (int j = 0; j < State::MAZE_WIDTH; j++) {
+      int pos[2] = {i, j};
+      maze[i][j].set_position(pos);
+    }
+  }
+}
+
+void loop() {
+  // Mapping phase
+  dfs_map_maze();
+
+  // Finding the shortest path phase
+  State* goal_state = find_bfs_shortest_path();
+  if (goal_state != nullptr) {
+    generate_actions(goal_state);
   }
 
+  // Execution phase
   while (!act_stack.isEmpty()) {
-    int act = act_stack.pop();
-    mark_solution_api();
-    if (act == 1) {
+    int action = act_stack.pop();
+    // Perform the action based on the value
+    if (action == 0) {
+      move_forward();
+    } else if (action == 1) {
+      turn_left();
+    } else if (action == 2) {
       turn_right();
     }
-    else if (act == 3) {
-      turn_left();
-    }
-    move_forward();
   }
+
+  // Mark the solution path in the API
+  mark_solution_api();
+
+  // End of the algorithm
+  // Replace with appropriate code to perform any necessary cleanup or stop the robot
 }
