@@ -1,24 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDistanceRight = forwardTargetDistance)
+void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDistanceRight = forwardTargetDistance, int Target_Angle = 0)
 {
   pid_Forward_Left.setpoint(targetDistanceLeft);
   pid_Forward_Right.setpoint(targetDistanceRight);
+  PID_MPU.setpoint(0);
   bool Both_Done = false;
   bool Right_Done = false;
   bool Left_Done = false;
   while (!Both_Done)
   {
+    double z = Read_MPU();
+    z = z - target_angle;
+    Serial.print("angle:");
+    Serial.println(z);
+    bt.print("angle:");
+    bt.println(z);
+    int motorSpeed_MPU = PID_MPU.compute(z);
 
-    Serial.print("Left_Count: ");     // USB Serial
-    Serial.print(encoderPosLeft);
-    Serial.print(" Right_Count: ");
-    Serial.println(encoderPosRight);
-    bt.print(",");    // BT MODULE (RX3 TX3)
-    bt.print("Left_Count:");    // BT MODULE (RX3 TX3)
-    bt.print(encoderPosLeft);
-    bt.print(",");
-    bt.print(" Right_Count:");
-    bt.println(encoderPosRight);
     if ((encoderPosLeft < (targetDistanceLeft + 5) && encoderPosLeft > (targetDistanceLeft - 5)) and Left_Done != true)
     {
       analogWrite(LEFT_PWM_PIN, 0);
@@ -31,6 +29,10 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
       int motorSpeedLeft = pid_Forward_Left.compute(encoderPosLeft);
       if ( encoderPosLeft < targetDistanceLeft )
       {
+        if (motorSpeed_MPU > 0)
+        {
+          motorSpeedLeft =  motorSpeedLeft + motorSpeed_MPU;
+        }
         digitalWrite(LEFT_IN1_PIN, HIGH);
         digitalWrite(LEFT_IN2_PIN, LOW);
       }
@@ -53,6 +55,10 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
       int motorSpeedRight = pid_Forward_Right.compute(encoderPosRight);
       if (encoderPosRight < targetDistanceRight)
       {
+        if (motorSpeed_MPU < 0)
+        {
+          motorSpeedRight =  motorSpeedRight + motorSpeed_MPU;
+        }
         digitalWrite(RIGHT_IN1_PIN, HIGH);
         digitalWrite(RIGHT_IN2_PIN, LOW);
       }
