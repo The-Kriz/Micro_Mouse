@@ -74,3 +74,14 @@ void TOF_Readings()
   bt.print("R: ");
   bt.println(Right_Sensor_Reading);
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+float Read_MPU()
+{
+  mpu.update();
+  double z = mpu.getAngleZ();
+  Serial.print("Z_Angle:");
+  Serial.println(z);
+  bt.print("Z_Angle: ");
+  bt.println(z);
+  return z;
+}
