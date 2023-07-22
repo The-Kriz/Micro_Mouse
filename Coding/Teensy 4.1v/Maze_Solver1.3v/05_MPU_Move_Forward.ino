@@ -10,7 +10,7 @@ void MPU_Move_Forward(int targetDistanceLeft = forwardTargetDistance, int target
   while (!Both_Done)
   {
     double z = Read_MPU();
-    z = z - target_angle;
+    z = z - Target_Angle;
     Serial.print("angle:");
     Serial.println(z);
     bt.print("angle:");
