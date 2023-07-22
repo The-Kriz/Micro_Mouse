@@ -41,9 +41,13 @@ void setup()
   pid_Forward_Right.begin();
   pid_Forward_Right.tune(Forward_RIGHT_KP, Forward_RIGHT_KI, Forward_RIGHT_KD);
   pid_Forward_Right.limit(Forward_RIGHT_PID_Limit[0], Forward_RIGHT_PID_Limit[1]);
+
+  PID_MPU.begin();
+  PID_MPU.tune(Forward_MPU_KP, Forward_MPU_KI, Forward_MPU_KD);
+  PID_MPU.limit(-60, 60);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   Wire2.begin();                                                                      // TOF ADDRESS SETUP
-  Serial.println("Assigning TOF Address");           
+  Serial.println("Assigning TOF Address");
   bt.println("Assigning TOF Address");
   Serial.println("L");
   bt.println("L");
@@ -69,13 +73,27 @@ void setup()
   sensorR.init(true);
   delay(100);
   sensorR.setAddress((uint8_t)3);
-  Serial.println("Done");
-  bt.println("Done");
+  Serial.println("Assigning TOF Address Completed!");
+  bt.println("Assigning TOF Address Completed!");
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Serial.println("Starting MPU6050 Callibration");
+  bt.println("Starting MPU6050 Callibration");
+  byte status = mpu.begin();
+  Serial.print(F("MPU6050 status: "));
+  Serial.println(status);
+  Serial.println(F("Calculating offsets, do not move MPU6050"));
+  bt.print(F("MPU6050 status: "));
+  bt.println(status);
+  bt.println(F("Calculating offsets, do not move MPU6050"));
+  delay(1000);
+  mpu.calcOffsets(true, false); // gyro and accelero
+  Serial.println("MPU6050 Callibration Completed!");
+  bt.println("MPU6050 Callibration Completed!");
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   sensorL.startContinuous();
   sensorC.startContinuous();
   sensorR.startContinuous();
-  leds[0] = CRGB::Maroon;
+  leds[0] = CRGB::Orange;
   FastLED.show();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
