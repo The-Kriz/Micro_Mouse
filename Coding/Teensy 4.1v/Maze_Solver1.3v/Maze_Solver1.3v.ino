@@ -1,25 +1,26 @@
-/* MazeSolver 1.1v 
- * Harikrishnan M     https://github.com/The-Kriz
- * Atulya Deep        https://github.com/atulya-deep
- *                           _____________________
- *                          |                     |
- *                          |  L       C       R  |
- *                          | TOF     TOF     TOF |
- *                          |                     |
- *                          |        Motor        | 
- *                          |       Driver        | 
- *                 Left     |                     |  Right
- *                 Motor B  |      Teensy 4.1     |  Motor A
- *                          | LED                 | 
- *                          |    Reset Start      | 
- *                           ---------------------
- *
- *Motor N20 1:50 
- */
+/* MazeSolver 1.1v
+   Harikrishnan M     https://github.com/The-Kriz
+   Atulya Deep        https://github.com/atulya-deep
+                             _____________________
+                            |                     |
+                            |  L       C       R  |
+                            | TOF     TOF     TOF |
+                            |                     |
+                            |        Motor        |
+                            |       Driver        |
+                   Left     |                     |  Right
+                   Motor B  |      Teensy 4.1     |  Motor A
+                            | LED                 |
+                            |    Reset Start      |
+                             ---------------------
+
+  Motor N20 1:50
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Wire.h>
 #include <VL53L0X.h>
 #include <FastLED.h>
+#include <MPU6050_light.h>
 #include <PIDController.h>
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //PCB Buttons
@@ -49,6 +50,8 @@
 #define NUM_LEDS    1
 ///////////////////////////////////////////////////////////////////////////////////////////////
 CRGB leds[NUM_LEDS];
+MPU6050 mpu(Wire2);
+PIDController PID_MPU;
 PIDController pidLeft;
 PIDController pidRight;
 PIDController pid_Forward_Left;
