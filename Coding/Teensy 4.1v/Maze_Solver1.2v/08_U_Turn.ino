@@ -95,5 +95,7 @@ void U_Turn(int targetDistanceRight = 540 , int targetDistanceLeft = -540)
   digitalWrite(RIGHT_IN2_PIN, LOW);
   digitalWrite(STANDBY_PIN, LOW);
   delay(100);
-  Move_Forward(Home_cell_forward-15, Home_cell_forward-15);
+  encoderPosRight = 0;
+  encoderPosLeft  = 0;
+  Move_Forward(Home_cell_forward, Home_cell_forward);
 }
