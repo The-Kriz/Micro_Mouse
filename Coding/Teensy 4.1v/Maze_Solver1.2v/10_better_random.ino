@@ -57,8 +57,8 @@ void makeDecision1()
     Serial.println("U-Turn");
     bt.println("U-Turn");
     U_Turn();
-    updateOrientation(true)
-    updateOrientation(true)
+    updateOrientation(true);
+    updateOrientation(true);
   }
   else if (Wall_On_Left && Wall_On_Right)
   {
@@ -71,12 +71,15 @@ void makeDecision1()
     Serial.println("Turn Right");
     bt.println("Turn Right");
     Turn_Right();
+    updateOrientation(true);
   }
   else if (Wall_On_Right && Wall_On_Center)
   {
     Serial.println("Turn Left");
     bt.println("Turn Left");
     Turn_Left();
+    updateOrientation(false);
+
   }
   else if (Wall_On_Left)
   {
@@ -93,6 +96,8 @@ void makeDecision1()
       Serial.println("Turn Right");
       bt.println("Turn Right");
       Turn_Right();
+      updateOrientation(true);
+
     }
   }
   else if (Wall_On_Right)
@@ -110,6 +115,8 @@ void makeDecision1()
       Serial.println("Turn Left");
       bt.println("Turn Left");
       Turn_Left();
+      updateOrientation(false);
+
     }
   }
   else if (Wall_On_Center)
@@ -121,12 +128,16 @@ void makeDecision1()
       Serial.println("Turn Right");
       bt.println("Turn Right");
       Turn_Right();
+      updateOrientation(true);
+
     }
     else
     {
       Serial.println("Turn Left");
       bt.println("Turn Left");
       Turn_Left();
+      updateOrientation(false);
+
     }
   }
   else
