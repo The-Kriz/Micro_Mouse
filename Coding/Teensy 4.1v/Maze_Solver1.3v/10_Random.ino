@@ -34,7 +34,7 @@ void makeDecision1()
   {
     Serial.println("Move Forward");
     bt.println("Move Forward");
-    Move_Forward();
+    MPU_Move_Forward();
   }
   else if (Wall_On_Left && Wall_On_Center)
   {
@@ -56,7 +56,7 @@ void makeDecision1()
     {
       Serial.println("Move Forward");
       bt.println("Move Forward");
-      Move_Forward();
+      MPU_Move_Forward();
     }
     else
     {
@@ -73,7 +73,7 @@ void makeDecision1()
     {
       Serial.println("Move Forward");
       bt.println("Move Forward");
-      Move_Forward();
+      MPU_Move_Forward();
     }
     else
     {
