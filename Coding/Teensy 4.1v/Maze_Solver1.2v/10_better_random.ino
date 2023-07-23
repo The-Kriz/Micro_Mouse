@@ -26,6 +26,64 @@ void updateOrientation(bool turn_right) {
     current_orientation = (current_orientation + 3) % 4; // Rotate counterclockwise
   }
 }
+// maze update
+void updateCurrentXY(int turn, int orientation)
+{
+  if (turn == 0) // Turn left
+  {
+    switch (orientation)
+    {
+      case 0:
+        current_y--;
+        break;
+      case 1:
+        current_x--;
+        break;
+      case 2:
+        current_y++;
+        break;
+      case 3:
+        current_x++;
+        break;
+    }
+  }
+  else if (turn==1)
+  {
+    switch (orientation)
+    {
+      case 0:
+        current_y++;
+        break;
+      case 1:
+        current_x++;
+        break;
+      case 2:
+        current_y--;
+        break;
+      case 3:
+        current_x--;
+        break;
+    }
+  }
+
+  else
+  {
+    switch (orientation)
+    {
+      case 0:
+        current_y--;
+        break;
+      case 1:
+        current_x++;
+        break;
+      case 2:
+        current_y++;
+        break;
+      case 3:
+        current_x--;
+        break;
+    }
+  }
 void makeDecision1()
 {
   delay(200);
@@ -59,12 +117,15 @@ void makeDecision1()
     U_Turn();
     updateOrientation(true);
     updateOrientation(true);
+    markCellAsVisited(current_x,current_y);
   }
   else if (Wall_On_Left && Wall_On_Right)
   {
     Serial.println("Move Forward");
     bt.println("Move Forward");
     Move_Forward();
+    updateCurrentXY( 3,current_orientation);
+    markCellAsVisited(current_x,current_y);
   }
   else if (Wall_On_Left && Wall_On_Center)
   {
@@ -72,6 +133,8 @@ void makeDecision1()
     bt.println("Turn Right");
     Turn_Right();
     updateOrientation(true);
+    updateCurrentXY( 1,current_orientation);
+    markCellAsVisited(current_x,current_y);
   }
   else if (Wall_On_Right && Wall_On_Center)
   {
@@ -79,6 +142,8 @@ void makeDecision1()
     bt.println("Turn Left");
     Turn_Left();
     updateOrientation(false);
+    updateCurrentXY( 0,current_orientation);
+    markCellAsVisited(current_x,current_y);
 
   }
   else if (Wall_On_Left)
@@ -90,6 +155,8 @@ void makeDecision1()
       Serial.println("Move Forward");
       bt.println("Move Forward");
       Move_Forward();
+      updateCurrentXY( 3,current_orientation);
+      markCellAsVisited(current_x,current_y);
     }
     else
     {
@@ -97,6 +164,8 @@ void makeDecision1()
       bt.println("Turn Right");
       Turn_Right();
       updateOrientation(true);
+      updateCurrentXY( 1,current_orientation);
+      markCellAsVisited(current_x,current_y);
 
     }
   }
@@ -109,6 +178,8 @@ void makeDecision1()
       Serial.println("Move Forward");
       bt.println("Move Forward");
       Move_Forward();
+      updateCurrentXY( 3,current_orientation);
+      markCellAsVisited(current_x,current_y);
     }
     else
     {
@@ -116,6 +187,8 @@ void makeDecision1()
       bt.println("Turn Left");
       Turn_Left();
       updateOrientation(false);
+      updateCurrentXY( 0,current_orientation);
+      markCellAsVisited(current_x,current_y);
 
     }
   }
@@ -129,6 +202,8 @@ void makeDecision1()
       bt.println("Turn Right");
       Turn_Right();
       updateOrientation(true);
+      updateCurrentXY( 1,current_orientation);
+      markCellAsVisited(current_x,current_y);
 
     }
     else
@@ -137,6 +212,8 @@ void makeDecision1()
       bt.println("Turn Left");
       Turn_Left();
       updateOrientation(false);
+      updateCurrentXY( 0,current_orientation);
+      markCellAsVisited(current_x,current_y);
 
     }
   }
