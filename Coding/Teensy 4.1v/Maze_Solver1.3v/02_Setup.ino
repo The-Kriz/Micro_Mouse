@@ -44,7 +44,7 @@ void setup()
 
   PID_MPU.begin();
   PID_MPU.tune(Forward_MPU_KP, Forward_MPU_KI, Forward_MPU_KD);
-  PID_MPU.limit(-60, 60);
+  PID_MPU.limit(-40, 40);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   Wire2.begin();                                                                      // TOF ADDRESS SETUP
   Serial.println("Assigning TOF Address");
@@ -76,6 +76,11 @@ void setup()
   Serial.println("Assigning TOF Address Completed!");
   bt.println("Assigning TOF Address Completed!");
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  leds[0] = CRGB::Pink;
+  FastLED.show();
+  while (digitalRead(START_BUTTON) != LOW)
+  {}
+  startButtonPressed = false;
   Serial.println("Starting MPU6050 Callibration");
   bt.println("Starting MPU6050 Callibration");
   byte status = mpu.begin();
@@ -89,6 +94,9 @@ void setup()
   mpu.calcOffsets(true, false); // gyro and accelero
   Serial.println("MPU6050 Callibration Completed!");
   bt.println("MPU6050 Callibration Completed!");
+  MPU_Error = Read_MPU();
+  bt.println(MPU_Error);
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   sensorL.startContinuous();
   sensorC.startContinuous();

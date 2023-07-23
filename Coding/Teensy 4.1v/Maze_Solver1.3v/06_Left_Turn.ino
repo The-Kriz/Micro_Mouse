@@ -1,6 +1,8 @@
 void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int targetDistanceLeft = LeftrotationTargetDistanceLeft)
 {
-  Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
+  //  Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
+  MPU_Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
+  updateOrientation(false);
   pid_Forward_Left.setpoint(targetDistanceLeft);
   pid_Forward_Right.setpoint(targetDistanceRight);
   bool Both_Done = false;
@@ -83,5 +85,6 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int t
   }
   digitalWrite(STANDBY_PIN, LOW);
   delay(100);
-  Move_Forward(After_TurnForwardTargetDistance, After_TurnForwardTargetDistance);
+  //  Move_Forward(After_TurnForwardTargetDistance, After_TurnForwardTargetDistance);
+  MPU_Move_Forward(After_TurnForwardTargetDistance, After_TurnForwardTargetDistance);
 }

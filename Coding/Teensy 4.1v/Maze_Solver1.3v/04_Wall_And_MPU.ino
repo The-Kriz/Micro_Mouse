@@ -78,10 +78,58 @@ void TOF_Readings()
 float Read_MPU()
 {
   mpu.update();
-  double z = mpu.getAngleZ();
+  int z = mpu.getAngleZ();
+  z = z - MPU_Error;
   Serial.print("Z_Angle:");
   Serial.println(z);
-  bt.print("Z_Angle: ");
-  bt.println(z);
+  //  bt.print("Z_Angle: ");
+  //  bt.println(z);
+  z = wrapAngle(z);
   return z;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void updateOrientation(bool turn_right) {
+  if (turn_right) {
+    current_orientation = (current_orientation + 1) % 4; // Rotate clockwise
+  } else {
+    current_orientation = (current_orientation + 3) % 4; // Rotate counterclockwise
+  }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function to wrap angle values between -180 and +180 degrees
+float wrapAngle(float angle) {
+  if (angle > 180.0) {
+    angle -= 360.0;
+  }
+  else if (angle < -180.0) {
+    angle += 360.0;
+  }
+  return angle;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////North: 0
+////East: 1
+////South: 2
+////West: 3
+int Turn_Angle()
+{
+  int Angle;
+  if (current_orientation == 0)
+  {
+    Angle == North;
+  }
+  else if (current_orientation == 1)
+  {
+    Angle == East;
+  }
+  else if (current_orientation == 2)
+  {
+    Angle == South;
+  }
+  else if (current_orientation == 3)
+  {
+    Angle == West;
+  }
+  return Angle;
 }

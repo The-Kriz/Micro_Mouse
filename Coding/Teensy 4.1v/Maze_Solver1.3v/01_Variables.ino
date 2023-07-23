@@ -15,21 +15,21 @@ volatile boolean bStateRight;
 int Initial_Speed = 50;
 int Rotation_LEFT_PID_Limits[2] = {30, 100};
 int Rotation_RIGHT_PID_Limit[2] = {30, 100};
-int Forward_LEFT_PID_Limits[2] = {30, 100};
-int Forward_RIGHT_PID_Limit[2] = {30, 100};
+int Forward_LEFT_PID_Limits[2] = {30, 60};
+int Forward_RIGHT_PID_Limit[2] = {30, 60};
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //  PID_MPU_Forward_VARIABLES
-#define Forward_MPU_KP  80.0000
-#define Forward_MPU_KD  0.0000
-#define Forward_MPU_KI  0.0000
+#define Forward_MPU_KP 45.00//73.00   //110.0000
+#define Forward_MPU_KD  1.00//1.0000
+#define Forward_MPU_KI  0.00
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //  PID_Forward_VARIABLES
-#define Forward_LEFT_KP  1.3800    //0.650  // PID constants for Left Motor
-#define Forward_LEFT_KD  1.8000   //0.100
+#define Forward_LEFT_KP  1.000    //0.650  // PID constants for Left Motor
+#define Forward_LEFT_KD  0.0050   //0.100
 #define Forward_LEFT_KI  0.0000
 
-#define Forward_RIGHT_KP 1.3800   //0.680  // PID constants for Right Motor
-#define Forward_RIGHT_KD 1.8000   //1.5000  
+#define Forward_RIGHT_KP 1.000   //0.680  // PID constants for Right Motor
+#define Forward_RIGHT_KD 0.0050   //1.5000  
 #define Forward_RIGHT_KI 0.0000
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // PID_Rotation_VARIABLES
@@ -45,7 +45,7 @@ int Forward_RIGHT_PID_Limit[2] = {30, 100};
 int Home_cell_forward                = 400;       // Distance From Cell Wall To Next Cell Start
 int forwardTargetDistance            = 750;        // Distance From Cell Start To Next Cell Start
 int TurnForwardTargetDistance        = 620;       // Distance From Cell Start To Turn Location (cell Center)
-int After_TurnForwardTargetDistance  = 160;       // Distance From Cell Center to Next Cell After Turn
+int After_TurnForwardTargetDistance  = 140;//160;       // Distance From Cell Center to Next Cell After Turn
 int LeftrotationTargetDistanceLeft   = -270;      // Distance To Rotate Left Motor When Turning Left
 int LeftrotationTargetDistanceRight  =  270;      // Distance To Rotate Right Motor When Turning Left
 int RightrotationTargetDistanceLeft  =  270;      // Distance To Rotate Left Motor When Turning Right
@@ -57,4 +57,10 @@ bool startButtonPressed = false;
 const int LED = 13;
 const int BRIGHTNESS = 10;
 int Target_Angle;
+int current_orientation = 0;
+const int North = 0;
+const int South = 180;
+const int East = 90;
+const int West = -90;
+int MPU_Error = 0;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
