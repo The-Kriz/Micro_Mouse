@@ -108,7 +108,7 @@ void makeDecision1()
   bt.println(Wall_On_Right);
 
   // Initialize random seed
-  randomSeed(analogRead(A0));
+  int n = rand()%2;
 
   if (Wall_On_Left && Wall_On_Center && Wall_On_Right)
   {
@@ -150,7 +150,7 @@ void makeDecision1()
   {
     Serial.println("Random Decision - Right or Forward");
     bt.println("Random Decision - Right or Forward");
-    if (random(2) == 0)
+    if (n == 0)
     {
       Serial.println("Move Forward");
       bt.println("Move Forward");
@@ -173,7 +173,7 @@ void makeDecision1()
   {
     Serial.println("Random Decision - Left or Forward");
     bt.println("Random Decision - Left or Forward");
-    if (random(2) == 0)
+    if (n == 0)
     {
       Serial.println("Move Forward");
       bt.println("Move Forward");
@@ -196,7 +196,7 @@ void makeDecision1()
   {
     Serial.println("Random Decision - Left or Right");
     bt.println("Random Decision - Left or Right");
-    if (random(2) == 0)
+    if (n == 0)
     {
       Serial.println("Turn Right");
       bt.println("Turn Right");
