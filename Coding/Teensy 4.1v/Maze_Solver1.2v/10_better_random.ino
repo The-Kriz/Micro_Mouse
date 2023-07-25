@@ -221,6 +221,20 @@ void makeDecision1()
   {
     Serial.println("No Wall - Delay 2000ms");
     bt.println("No Wall");
-    delay(1000);
+    if(n==0)
+    {
+    Turn_right();
+    updateOrientation(true);
+    updateCurrentXY( 1,current_orientation);
+    markCellAsVisited(current_x,current_y);
+    }
+    else
+    {
+      Turn_Left();
+      updateOrientation(false);
+      updateCurrentXY( 0,current_orientation);
+      markCellAsVisited(current_x,current_y);
+    }
+      delay(1000);
   }
 }
