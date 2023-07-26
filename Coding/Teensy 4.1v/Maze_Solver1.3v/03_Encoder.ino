@@ -14,7 +14,6 @@ void rightEncoderISR()
 {
   aStateRight = digitalRead(RIGHT_ENCODER_PIN_A);
   bStateRight = digitalRead(RIGHT_ENCODER_PIN_B);
-
   if (aStateRight == bStateRight)
     encoderPosRight--;
   else
@@ -24,11 +23,11 @@ void rightEncoderISR()
 
 void Encoder_Readings()
 {
-  Serial.print("Left Count: ");     // USB Serial
+  Serial.print("Left Count: ");  
   Serial.print(encoderPosLeft);
   Serial.print(" Right Count: ");
   Serial.println(encoderPosRight);
-  bt.print("Left Count: ");    // BT MODULE (RX3 TX3)
+  bt.print("Left Count: ");     
   bt.print(encoderPosLeft);
   bt.print(" Right Count: ");
   bt.println(encoderPosRight);

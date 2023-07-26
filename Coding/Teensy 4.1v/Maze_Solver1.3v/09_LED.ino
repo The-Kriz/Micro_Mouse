@@ -6,7 +6,7 @@ void Blink_Led()
   digitalWrite(LED, LOW);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void RGB_LED(const char* LED_COLOUR)
+void RGB_LED(const char* LED_COLOUR)                                              // STATUS LED COLOUR
 {
   if (strcmp(LED_COLOUR, "RED") == 0)
   {
@@ -60,19 +60,3 @@ void RGB_LED(const char* LED_COLOUR)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void Pause(struct maze *mazes)
-{
-  while (!startButtonPressed)
-  {
-    if (digitalRead(START_BUTTON) == LOW)
-    {
-      leds[0] = CRGB::Yellow;
-      FastLED.show();
-      Blink_Led();
-      startButtonPressed = true;
-    }
-  }
-//  print_maze(mazes);
-  startButtonPressed = false;
-}

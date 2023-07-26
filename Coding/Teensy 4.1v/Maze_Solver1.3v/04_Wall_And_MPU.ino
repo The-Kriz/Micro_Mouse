@@ -80,56 +80,59 @@ float Read_MPU()
   mpu.update();
   int z = mpu.getAngleZ();
   z = z - MPU_Error;
-  Serial.print("Z_Angle:");
-  Serial.println(z);
-  //  bt.print("Z_Angle: ");
-  //  bt.println(z);
-  z = wrapAngle(z);
   return z;
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void updateOrientation(bool turn_right) {
-  if (turn_right) {
-    current_orientation = (current_orientation + 1) % 4; // Rotate clockwise
-  } else {
-    current_orientation = (current_orientation + 3) % 4; // Rotate counterclockwise
+void updateOrientation(bool turn_right)                                             // BOT ORIENTATION
+{
+  if (turn_right)                                                      //North:0 East:1 South:2 West:3
+  {
+    Trun_Count ++;
+    current_orientation = (current_orientation + 1) % 4;                           // Rotate clockwise
+  }
+  else
+  {
+    Trun_Count --;
+    current_orientation = (current_orientation + 3) % 4;                    // Rotate counterclockwise
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// Function to wrap angle values between -180 and +180 degrees
-float wrapAngle(float angle) {
-  if (angle > 180.0) {
+float wrapAngle(float angle)            // Function to wrap angle values between -180 and +180 degrees
+{
+  if (angle > 180.0)
+  {
     angle -= 360.0;
   }
-  else if (angle < -180.0) {
+  else if (angle < -180.0)
+  {
     angle += 360.0;
   }
   return angle;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////North: 0
-////East: 1
-////South: 2
-////West: 3
-int Turn_Angle()
+//////////////////////////////////////////////////////////////////////////////////////////////////
+int Get_Turn_Angle()                                               // FUNCTION TO SET TARGET ANGLE
 {
-  int Angle;
-  if (current_orientation == 0)
-  {
-    Angle == North;
-  }
-  else if (current_orientation == 1)
-  {
-    Angle == East;
-  }
-  else if (current_orientation == 2)
-  {
-    Angle == South;
-  }
-  else if (current_orientation == 3)
-  {
-    Angle == West;
-  }
-  return Angle;
+  Turn_Target_Angle = Trun_Count * 90;
+  return Turn_Target_Angle;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void Reset()                                                      // FUNCTION TO RESET AFTER CRASH
+{
+  bt.println("Entred Reset Mode");
+  leds[0] = CRGB::Green;
+  FastLED.show();
+  delay(4000);
+  Serial.print("Resetting MPU");
+  bt.print("Resetting MPU");
+  mpu.calcOffsets(true, false);  // GYRO and ACCELERO
+  MPU_Error = mpu.getAngleZ();
+  Trun_Count          = 0;
+  encoderPosLeft      = 0;
+  encoderPosRight     = 0;
+  current_orientation = 0;
+  Random_Selection = true;
+  Serial.print("Done");
+  bt.print("Done");
+  leds[0] = CRGB::Yellow;
+  FastLED.show();
 }

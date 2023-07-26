@@ -1,9 +1,8 @@
 void U_Turn(int targetDistanceRight = 540 , int targetDistanceLeft = -540)
 {
-  //  Move_Forward(U_TurnForwardTargetDistance, U_TurnForwardTargetDistance);
   MPU_Move_Forward(U_TurnForwardTargetDistance, U_TurnForwardTargetDistance);
-  updateOrientation(true);
-  updateOrientation(true);
+  updateOrientation(false);
+  updateOrientation(false);
   pid_Forward_Left.setpoint(targetDistanceLeft);
   pid_Forward_Right.setpoint(targetDistanceRight);
   bool Both_Done = false;
@@ -11,17 +10,26 @@ void U_Turn(int targetDistanceRight = 540 , int targetDistanceLeft = -540)
   bool Left_Done = false;
   bool initial = false;
   digitalWrite(STANDBY_PIN, HIGH);
-
   while (!Both_Done)
   {
-    while ((encoderPosRight > targetDistanceRight or encoderPosLeft < targetDistanceLeft ) and initial != true )
+    mpu.update();
+    if (digitalRead(START_BUTTON) == LOW)
     {
+      break;
+    }
+    while ((encoderPosRight > targetDistanceRight and  encoderPosLeft < targetDistanceLeft ) and initial != true )
+    {
+      if (digitalRead(START_BUTTON) == LOW)
+      {
+        break;
+      }
+      mpu.update();
       digitalWrite(RIGHT_IN1_PIN, LOW);
       digitalWrite(RIGHT_IN2_PIN, HIGH);
       digitalWrite(LEFT_IN1_PIN, HIGH);
       digitalWrite(LEFT_IN2_PIN, LOW);
-      analogWrite(LEFT_PWM_PIN, Initial_Speed);
-      analogWrite(RIGHT_PWM_PIN, Initial_Speed);
+      analogWrite(LEFT_PWM_PIN, 60);
+      analogWrite(RIGHT_PWM_PIN, 60);
     }
     initial = true;
     if ((encoderPosRight < (targetDistanceRight + 5) && encoderPosRight > (targetDistanceRight - 5)) && Right_Done != true)
@@ -91,15 +99,27 @@ void U_Turn(int targetDistanceRight = 540 , int targetDistanceLeft = -540)
   analogWrite(LEFT_PWM_PIN, Initial_Speed);
   analogWrite(RIGHT_PWM_PIN, Initial_Speed);
   digitalWrite(STANDBY_PIN, HIGH);
-  delay(1000);
+  delay(1500);
   digitalWrite(LEFT_IN1_PIN, LOW);
   digitalWrite(LEFT_IN2_PIN, LOW);
   digitalWrite(RIGHT_IN1_PIN, LOW);
   digitalWrite(RIGHT_IN2_PIN, LOW);
   digitalWrite(STANDBY_PIN, LOW);
-  delay(100);
   encoderPosRight = 0;
   encoderPosLeft  = 0;
-    Move_Forward(Home_cell_forward, Home_cell_forward);
-//  MPU_Move_Forward(Home_cell_forward, Home_cell_forward);
+  delay(500);
+  bt.print("MPU READ Before U_TURN calib: ");
+  bt.println(Read_MPU());
+  MPU_Error = (Read_MPU() - Get_Turn_Angle());
+  Serial.print("error : ");
+  Serial.println(MPU_Error);
+  Serial.print("MPU READ AFTER U_TURN: ");
+  Serial.println(Read_MPU());
+  Serial.println("done rotation");
+  bt.print("error : ");
+  bt.println(MPU_Error);
+  bt.print("MPU READ AFTER U_TURN: ");
+  bt.println(Read_MPU());
+  bt.println("done rotation");
+  MPU_Move_Forward(Home_cell_forward, Home_cell_forward);
 }

@@ -1,6 +1,6 @@
-void makeDecision1()
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+void makeDecision()
 {
-  delay(200);
   int Wall_On_Left = Left_Wall();
   int Wall_On_Center = Center_Wall();
   int Wall_On_Right = Right_Wall();
@@ -86,7 +86,7 @@ void makeDecision1()
   {
     Serial.println("Random Decision - Left or Right");
     bt.println("Random Decision - Left or Right");
-    if (random(2) == 1)
+    if (random(2) == Right_Alogo )
     {
       Serial.println("Turn Right");
       bt.println("Turn Right");
@@ -103,6 +103,26 @@ void makeDecision1()
   {
     Serial.println("No Wall - Delay 2000ms");
     bt.println("No Wall");
-    delay(1000);
+    Read_MPU();
+    int x_val = random(3);
+    if (x_val == 0)
+    {
+      Serial.println("Turn Right");
+      bt.println("Turn Right");
+      Turn_Right();
+    }
+    else if (x_val == 1)
+    {
+      Serial.println("Turn Left");
+      bt.println("Turn Left");
+      Turn_Left();
+    }
+    else
+    {
+      Serial.println("Move Forward");
+      bt.println("Move Forward");
+      MPU_Move_Forward();
+    }
   }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////

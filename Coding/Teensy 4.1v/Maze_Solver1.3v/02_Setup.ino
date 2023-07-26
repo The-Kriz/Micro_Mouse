@@ -17,6 +17,7 @@ void setup()
   pinMode(RIGHT_IN1_PIN, OUTPUT);
   pinMode(RIGHT_IN2_PIN, OUTPUT);
   pinMode(STANDBY_PIN, OUTPUT);
+  //  pinMode(Speed_CONTROLL, INPUT_PULLUP);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   pinMode(LeftTOF, OUTPUT);                                                                        // TOF
   pinMode(CenterTOF, OUTPUT);
@@ -29,27 +30,27 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(RIGHT_ENCODER_PIN_A), rightEncoderISR, CHANGE);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   pidLeft.begin();                                                                                  // PID
-  pidLeft.tune(Rotation_LEFT_KP, Rotation_LEFT_KI, Rotation_LEFT_KD);
+  pidLeft.tune(Rotation_LEFT_KP, Rotation_LEFT_KI, Rotation_LEFT_KD);                      //LEFT Rotation
   pidLeft.limit(Rotation_LEFT_PID_Limits[0], Rotation_LEFT_PID_Limits[1]);
   pidRight.begin();
-  pidRight.tune(Rotation_RIGHT_KP, Rotation_RIGHT_KI, Rotation_RIGHT_KD);
+  pidRight.tune(Rotation_RIGHT_KP, Rotation_RIGHT_KI, Rotation_RIGHT_KD);                 //RIGHT Rotation
   pidRight.limit(Rotation_RIGHT_PID_Limit[0], Rotation_LEFT_PID_Limits[1]);
 
   pid_Forward_Left.begin();
-  pid_Forward_Left.tune(Forward_LEFT_KP, Forward_LEFT_KI, Forward_LEFT_KD);
+  pid_Forward_Left.tune(Forward_LEFT_KP, Forward_LEFT_KI, Forward_LEFT_KD);                 //LEFT Forward
   pid_Forward_Left.limit(Forward_LEFT_PID_Limits[0], Forward_LEFT_PID_Limits[1]);
   pid_Forward_Right.begin();
-  pid_Forward_Right.tune(Forward_RIGHT_KP, Forward_RIGHT_KI, Forward_RIGHT_KD);
+  pid_Forward_Right.tune(Forward_RIGHT_KP, Forward_RIGHT_KI, Forward_RIGHT_KD);            //RIGHT Forward
   pid_Forward_Right.limit(Forward_RIGHT_PID_Limit[0], Forward_RIGHT_PID_Limit[1]);
 
-  PID_MPU.begin();
+  PID_MPU.begin();                                                                           //Forward MPU
   PID_MPU.tune(Forward_MPU_KP, Forward_MPU_KI, Forward_MPU_KD);
-  PID_MPU.limit(-40, 40);
+  PID_MPU.limit(MPU_PID_Limit[0], MPU_PID_Limit[1]);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   Wire2.begin();                                                                      // TOF ADDRESS SETUP
   Serial.println("Assigning TOF Address");
   bt.println("Assigning TOF Address");
-  Serial.println("L");
+  Serial.println("L");                                                           // lEFT TOF ADDRESS SETUP
   bt.println("L");
   digitalWrite(LeftTOF, HIGH);
   delay(150);
@@ -57,7 +58,7 @@ void setup()
   sensorL.init(true);
   delay(100);
   sensorL.setAddress((uint8_t)1);
-  Serial.println("C");
+  Serial.println("C");                                                         // CENTER TOF ADDRESS SETUP
   bt.println("C");
   digitalWrite(CenterTOF, HIGH);
   delay(150);
@@ -65,7 +66,7 @@ void setup()
   sensorC.init(true);
   delay(100);
   sensorC.setAddress((uint8_t)2);
-  Serial.println("R");
+  Serial.println("R");                                                          // RIGHT TOF ADDRESS SETUP
   bt.println("R");
   digitalWrite(RightTOF, HIGH);
   delay(150);
@@ -75,11 +76,41 @@ void setup()
   sensorR.setAddress((uint8_t)3);
   Serial.println("Assigning TOF Address Completed!");
   bt.println("Assigning TOF Address Completed!");
+  sensorL.startContinuous();
+  sensorC.startContinuous();
+  sensorR.startContinuous();
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  bt.println("Set Maze Starting position");                                            // Algorithm Value
+  leds[0] = CRGB::Green;
+  FastLED.show();
+  while (digitalRead(START_BUTTON) != LOW)
+  {
+  }
+  if (Left_Wall())
+  {
+    current_x = 0;
+  }
+  else
+  {
+    current_x = 24;
+    leds[0] = CRGB::Black;
+    FastLED.show();
+    delay(200);
+    leds[0] = CRGB::Green;
+    FastLED.show(current_x);
+    delay(200);
+  }
+  Serial.print("Maze Starting position: ");
+  Serial.println(current_x);
+  bt.print("Maze Starting position: ");
+  bt.println(current_x);
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  delay(1000);                                                                         // MPU Callibration
   leds[0] = CRGB::Pink;
   FastLED.show();
   while (digitalRead(START_BUTTON) != LOW)
   {}
+  delay(500);
   startButtonPressed = false;
   Serial.println("Starting MPU6050 Callibration");
   bt.println("Starting MPU6050 Callibration");
@@ -96,11 +127,7 @@ void setup()
   bt.println("MPU6050 Callibration Completed!");
   MPU_Error = Read_MPU();
   bt.println(MPU_Error);
-
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  sensorL.startContinuous();
-  sensorC.startContinuous();
-  sensorR.startContinuous();
   leds[0] = CRGB::Orange;
   FastLED.show();
 }

@@ -6,11 +6,16 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
   bool Both_Done = false;
   bool Right_Done = false;
   bool Left_Done = false;
+  ;
   digitalWrite(STANDBY_PIN, HIGH);
   while (!Both_Done)
   {
-
-    if ((encoderPosLeft < (targetDistanceLeft + 5) && encoderPosLeft > (targetDistanceLeft - 5)) and Left_Done != true)
+    mpu.update();
+    if (digitalRead(START_BUTTON) == LOW)
+    {
+      break;
+    }
+    if ((encoderPosLeft < (targetDistanceLeft + 3) && encoderPosLeft > (targetDistanceLeft - 3)) and Left_Done != true)
     {
       analogWrite(LEFT_PWM_PIN, 0);
       digitalWrite(LEFT_IN1_PIN, LOW);
@@ -32,7 +37,7 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
       }
       analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
     }
-    if ((encoderPosRight < (targetDistanceRight + 5) && encoderPosRight > (targetDistanceRight - 5)) && Right_Done != true)
+    if ((encoderPosRight < (targetDistanceRight + 3) && encoderPosRight > (targetDistanceRight - 3)) && Right_Done != true)
     {
       analogWrite(RIGHT_PWM_PIN, 0);
       digitalWrite(RIGHT_IN1_PIN, LOW);
@@ -54,7 +59,6 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
       }
       analogWrite(RIGHT_PWM_PIN, abs(motorSpeedRight));
     }
-    delay(100);
     if (Left_Done == true and Right_Done == true)
     {
       Both_Done = true;
@@ -68,6 +72,5 @@ void Move_Forward(int targetDistanceLeft = forwardTargetDistance, int targetDist
     }
   }
   digitalWrite(STANDBY_PIN, LOW);
-  delay(500);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

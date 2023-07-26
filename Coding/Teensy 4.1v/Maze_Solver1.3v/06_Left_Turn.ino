@@ -1,6 +1,5 @@
 void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int targetDistanceLeft = LeftrotationTargetDistanceLeft)
 {
-  //  Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
   MPU_Move_Forward(TurnForwardTargetDistance, TurnForwardTargetDistance);
   updateOrientation(false);
   pid_Forward_Left.setpoint(targetDistanceLeft);
@@ -10,11 +9,20 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int t
   bool Left_Done = false;
   bool initial = false;
   digitalWrite(STANDBY_PIN, HIGH);
-
   while (!Both_Done)
   {
+    if (digitalRead(START_BUTTON) == LOW)
+    {
+      break;
+    }
+    mpu.update();
     while ((encoderPosRight < targetDistanceRight or encoderPosLeft > targetDistanceLeft ) and initial != true )
     {
+      if (digitalRead(START_BUTTON) == LOW)
+      {
+        break;
+      }
+      mpu.update();
       digitalWrite(RIGHT_IN1_PIN, HIGH);
       digitalWrite(RIGHT_IN2_PIN, LOW);
       digitalWrite(LEFT_IN1_PIN, LOW);
@@ -23,7 +31,7 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int t
       analogWrite(RIGHT_PWM_PIN, Initial_Speed);
     }
     initial = true;
-    if ((encoderPosRight < (targetDistanceRight + 5) && encoderPosRight > (targetDistanceRight - 5)) && Right_Done != true)
+    if ((encoderPosRight < (targetDistanceRight + 3) && encoderPosRight > (targetDistanceRight - 3)) && Right_Done != true)
     {
       analogWrite(RIGHT_PWM_PIN, 0);
       digitalWrite(RIGHT_IN1_PIN, LOW);
@@ -67,8 +75,6 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int t
       }
       analogWrite(LEFT_PWM_PIN, abs(motorSpeedLeft));
     }
-
-    delay(100);
     if (Left_Done && Right_Done)
     {
       Both_Done = true;
@@ -84,7 +90,5 @@ void Turn_Left(int targetDistanceRight = LeftrotationTargetDistanceRight , int t
     }
   }
   digitalWrite(STANDBY_PIN, LOW);
-  delay(100);
-  //  Move_Forward(After_TurnForwardTargetDistance, After_TurnForwardTargetDistance);
   MPU_Move_Forward(After_TurnForwardTargetDistance, After_TurnForwardTargetDistance);
 }
